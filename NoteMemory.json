@@ -1,0 +1,12 @@
+{
+  "Notes": [
+    {
+      "Path": "Default.txt",
+      "Default": true
+    },
+    {
+      "Path": "Test.txt",
+      "Default": false
+    }
+  ] 
+}

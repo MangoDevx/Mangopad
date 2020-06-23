@@ -1,0 +1,148 @@
+﻿<mah:MetroWindow x:Class="Mangopad.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:local="clr-namespace:Mangopad"
+                 xmlns:vms="clr-namespace:Mangopad.ViewModels"
+                 mc:Ignorable="d"
+                 Height="450"
+                 Width="800"
+                 WindowStyle="SingleBorderWindow"
+                 mah:ControlsHelper.ContentCharacterCasing="Normal"
+                 WindowTitleBrush="#30475e"
+                 BorderThickness="0"
+                 GlowBrush="Black"
+                 NonActiveGlowBrush="Black"
+                 ResizeMode="CanResizeWithGrip"
+                 WindowTransitionsEnabled="False"
+                 WindowStartupLocation="CenterScreen"
+                 NonActiveWindowTitleBrush="#30475e"
+                 TitleForeground="White"
+                 TitleAlignment="Center"
+                 Title="{Binding ActiveNote.Path}">
+
+    <Window.DataContext>
+        <vms:NoteViewModel/>
+    </Window.DataContext>
+
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+            <mah:DropDownButton ToolTip="Open file dialog" ArrowVisibility="Collapsed" Margin="6,0,-10,0">
+                <mah:DropDownButton.Items>
+                    <Button>New</Button>
+                    <Button>Open</Button>
+                    <Button>Save</Button>
+                    <Button>Save As</Button>
+                    <Button>Close</Button>
+                </mah:DropDownButton.Items>
+                <mah:DropDownButton.Icon>
+                    <iconPacks:BoxIcons Kind="SolidFileBlank" />
+                </mah:DropDownButton.Icon>
+            </mah:DropDownButton>
+            <mah:DropDownButton ToolTip="Open edit dialog" ArrowVisibility="Collapsed" Margin="5,0,-10,0">
+                <mah:DropDownButton.Items>
+                    <Button>Select All</Button>
+                    <Button>Copy</Button>
+                    <Button>Clear</Button>
+                    <Button>Find</Button>
+                    <Button>Replace</Button>
+                </mah:DropDownButton.Items>
+                <mah:DropDownButton.Icon>
+                    <iconPacks:PackIconBoxIcons Kind="SolidEdit" />
+                </mah:DropDownButton.Icon>
+            </mah:DropDownButton>
+            <Button ToolTip="Quick Save">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconBoxIcons Kind="SolidSave" />
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button ToolTip="Print">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconBoxIcons Kind="SolidPrinter" />
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button ToolTip="Settings">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconBoxIcons Kind="SolidCog" />
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Label Content="Mangopad" Margin="0,1,0,0" Foreground="DarkGray"/>
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+
+
+    <Grid Background="#222831">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" HorizontalAlignment="Stretch" Text="TextBox" TextWrapping="Wrap" AcceptsReturn="True"
+                 AcceptsTab="True" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" BorderThickness="0" />
+        <Grid Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Char:" VerticalAlignment="Bottom" Margin="10,0,0,3" />
+            <Label Grid.Column="1" Content="Words:" VerticalAlignment="Bottom" Margin="0,0,0,3" />
+            <Label Grid.Column="2" Content="Last Saved:" VerticalAlignment="Bottom" Margin="0,0,0,3" />
+            <Image Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup ClipGeometry="M0,0 V980 H1400 V0 H0 Z">
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Brush>
+                                        <SolidColorBrush Color="#FFFFFFFF" Opacity="0" />
+                                    </GeometryDrawing.Brush>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry RadiusX="0" RadiusY="0" Rect="0,0,1400,980" />
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                                <DrawingGroup Opacity="1"
+                                              Transform="1.33577562110631,0,0,1.33998507642611,291.26078871304,138.202808150458">
+                                    <DrawingGroup Opacity="1">
+                                        <DrawingGroup Opacity="1">
+                                            <DrawingGroup Opacity="1" Transform="1,0,0,1,0,2">
+                                                <GeometryDrawing Brush="#FFFAD841"
+                                                                 Geometry="F0 M1400,980z M0,0z M388.386118,264.62471C388.386118,180.473029 320.186091,112.251814 236.060544,112.251814 197.393282,112.251814 162.216028,126.77072 135.354314,150.515181L135.341714,150.515181C131.057951,154.30875 127.000976,158.341779 123.158188,162.589064 49.8302439,230.406975 76.6037631,331.711635 40.5697561,367.567788 -3.26321951,411.187522 1.78910105,479.320514 74.9910523,491.394397 238.265422,518.340075 335.55724,380.145798 335.55724,380.145798 360.466063,353.011072 388.386118,304.35005 388.386118,264.62471" />
+                                                <GeometryDrawing Brush="#FFFAAC28"
+                                                                 Geometry="F0 M1400,980z M0,0z M375.712479,203.853257C375.712479,204.357386 375.788075,204.836308 375.788075,205.340437 375.788075,251.669863 343.218877,308.42215 314.177483,340.056225 314.177483,340.056225 209.275685,488.90022 32.0160892,472.528641 42.1459289,481.565147 56.3201449,488.320472 74.9923122,491.395657 238.266682,518.328732 335.5585,380.147059 335.5585,380.147059 360.454723,353.012332 388.387378,304.351311 388.387378,264.62597 388.387378,243.011453 383.826431,222.480812 375.712479,203.853257" />
+                                                <GeometryDrawing Brush="#FF454849"
+                                                                 Geometry="F0 M1400,980z M0,0z M236.060544,124.852511C202.105422,124.852511 169.309436,137.317092 143.695052,159.95247 139.839666,163.367942 136.072474,167.085891 132.506871,171.043302 91.6599303,208.87816 83.8231638,256.883814 76.893547,299.21802 71.6648362,331.242795 67.1416864,358.906857 49.4522648,376.500948 29.4571707,396.414031 20.8266481,422.716945 27.4664808,443.487047 33.4133519,462.076793 51.0145784,474.667407 77.0447387,478.965104 230.806634,504.360586 324.331261,374.207163 325.26361,372.883825 325.565993,372.442712 325.906174,372.014203 326.284153,371.6109 350.877993,344.81646 375.786815,299.457481 375.786815,264.622189 375.786815,187.553516 313.105282,124.852511 236.060544,124.852511 M117.551498,507.536597C103.276488,507.536597 88.4093101,506.377101 72.9499652,503.818648 37.117547,497.920342 12.4355122,479.217168 3.47740767,451.187613 -6.18625784,421.015511 4.63654355,385.562661 31.6872474,358.629586 43.5809895,346.782562 47.4993728,322.861656 52.0225226,295.147181 59.229324,251.098937 68.1874286,196.262339 114.603261,153.335781 118.005073,149.4918 122.452627,145.093277 127.000976,141.072851 157.226704,114.354031 195.956962,99.6460763 236.060544,99.6460763 327.002314,99.6460763 400.985422,173.652168 400.985422,264.622189 400.985422,307.548747 372.25901,358.541364 345.359498,388.095908 337.472334,399.010294 255.551666,507.523994 117.551498,507.536597" />
+                                                <GeometryDrawing Brush="#FF454849"
+                                                                 Geometry="F0 M1400,980z M0,0z M304.913215,138.428696C301.423208,138.428696 297.945801,136.991929 295.463738,134.156206 290.852393,128.938474 291.356365,120.97324 296.572477,116.373066 336.852449,80.8193905 342.950511,12.257889 343.000909,11.5773153 343.567877,4.63294263 349.779334,-0.496566757 356.582957,0.0453715818 363.512574,0.599913138 368.678289,6.67466382 368.123919,13.6064333 367.859334,16.8202536 361.2447,92.918479 313.241355,135.277892 310.847487,137.395232 307.874052,138.428696 304.913215,138.428696" />
+                                                <GeometryDrawing Brush="#FF3BB777"
+                                                                 Geometry="F0 M1400,980z M0,0z M496.533497,109.976933C378.528424,-2.51938311 329.643128,113.99736 329.643128,113.99736 329.643128,113.99736 384.072117,228.018666 496.533497,109.976933" />
+                                                <GeometryDrawing Brush="#FF229857"
+                                                                 Geometry="F0 M1400,980z M0,0z M496.533497,109.978194L329.643128,113.99862C329.643128,113.99862,384.072117,228.019926,496.533497,109.978194" />
+                                                <GeometryDrawing Brush="#FF454849"
+                                                                 Geometry="F0 M1400,980z M0,0z M343.88664,113.628085C350.198891,123.811485 366.792173,146.156989 392.923128,150.227828 418.172131,154.248254 446.860744,140.788018 478.346403,110.414265 445.361427,81.5150881 415.942054,69.5168253 390.945037,74.7849701 364.952675,80.2169567 349.644521,103.154812 343.88664,113.628085 M401.667044,176.114836C397.345483,176.114836 393.049121,175.787153 388.790556,175.106579 341.769957,167.607665 319.204605,121.391667 318.272256,119.425565 316.722542,116.186539 316.634347,112.43078 318.02027,109.128737 318.864424,107.112222 339.1745,59.8501577 385.791922,50.1078709 421.81333,42.5459406 462.005107,59.6485063 505.233316,100.848423 507.652382,103.154812 509.050905,106.330823 509.1265,109.670675 509.214695,113.010528 507.954765,116.249555 505.661692,118.656769 469.287504,156.844517 434.374835,176.114836 401.667044,176.114836" />
+                                                <GeometryDrawing Brush="#FFFEFEFE"
+                                                                 Geometry="F0 M1400,980z M0,0z M109.532042,287.611718C109.078467,287.611718 108.612293,287.573908 108.146118,287.510892 102.980404,286.754699 99.4148014,281.952873 100.17076,276.785554 100.548739,274.214498 109.821826,213.429181 145.150272,185.6895 149.257645,182.47568 155.191916,183.194063 158.417338,187.290109 161.64276,191.386154 160.924599,197.334873 156.817226,200.561297 127.372655,223.700803 118.956321,278.965911 118.868125,279.533055 118.187763,284.221452 114.143387,287.611718 109.532042,287.611718" />
+                                                <GeometryDrawing Brush="#FFFEFEFE"
+                                                                 Geometry="F0 M1400,980z M0,0z M188.152953,163.39819C193.356466,167.809316 194.011629,175.610708 189.589274,180.815836 185.179518,186.033568 177.380549,186.676332 172.177037,182.265206 166.973525,177.85408 166.318361,170.052689 170.740716,164.834957 175.150472,159.629828 182.949441,158.987064 188.152953,163.39819" />
+                                            </DrawingGroup>
+                                        </DrawingGroup>
+                                    </DrawingGroup>
+                                </DrawingGroup>
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+        </Grid>
+    </Grid>
+
+
+</mah:MetroWindow>
