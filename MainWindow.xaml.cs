@@ -1,5 +1,6 @@
 ﻿using ControlzEx.Theming;
 using MahApps.Metro.Controls;
+using Mangopad.ViewModels;
 
 namespace Mangopad
 {

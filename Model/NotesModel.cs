@@ -7,6 +7,7 @@
     public class Note
     {
         public string Path { get; set; }
+        public string Name {get; set;}
         public bool Default { get; set; }
     }
 }
