@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.IO;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace Mangopad.Commands
 {
@@ -35,16 +37,37 @@ namespace Mangopad.Commands
             return new[] { filePath, fileContent };
         }
 
-        public void SaveFile(string content, string path)
+        public bool SaveFile(string content, string path)
         {
-            if (path is null)
+            if (string.IsNullOrEmpty(path))
             {
                 var fileDialog = new OpenFileDialog();
                 fileDialog.ShowDialog();
                 path = fileDialog.FileName;
             }
-            if (string.IsNullOrEmpty(path)) return;
+            if (string.IsNullOrEmpty(path)) return false;
             File.WriteAllText(path, content);
+            return true;
+        }
+
+        public void PrintFile(string content)
+        {
+            var pd = new PrintDialog();
+            pd.ShowDialog();
+            var document = CreateFlowDocument(content);
+            IDocumentPaginatorSource idpSource = document;
+            pd.PrintDocument(idpSource.DocumentPaginator, "");
+        }
+
+        private FlowDocument CreateFlowDocument(string input)
+        {
+            FlowDocument doc = new FlowDocument();
+            Section sec = new Section();
+            Paragraph p1 = new Paragraph();
+            p1.Inlines.Add(input);
+            sec.Blocks.Add(p1);
+            doc.Blocks.Add(sec);
+            return doc;
         }
     }
 }

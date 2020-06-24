@@ -1,4 +1,5 @@
 ﻿using Mangopad.Commands;
+using Mangopad.Extensions;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace Mangopad.ViewModels
         private string _noteContext;
         private string _currentFilePath;
         private string _lastSaveTime;
+        private string _savedText;
+        private int _wordCount;
+        private int _charCount;
+        private bool _unsavedChanges;
 
         private readonly NoteService _noteService;
 
@@ -20,17 +25,20 @@ namespace Mangopad.ViewModels
         public RelayCommand OpenFileCommand { get; }
         public RelayCommand SaveFileCommand { get; }
         public RelayCommand NewFileCommand { get; }
+        public RelayCommand ExitFileCommand { get; }
+        public RelayCommand PrintFileCommand { get; }
 
         public NoteViewModel()
         {
             OpenNote = "Default";
-            LastSaveTime = "0/0/0000 00:00";
+            LastSaveTime = "";
             _noteService = new NoteService();
             SaveFileAsCommand = new RelayCommand(SaveAsFile, CanFireCommand);
             OpenFileCommand = new RelayCommand(OpenFile, CanFireCommand);
             SaveFileCommand = new RelayCommand(SaveFile, CanFireCommand);
             NewFileCommand = new RelayCommand(NewFile, CanFireCommand);
-
+            ExitFileCommand = new RelayCommand(ExitFile, CanFireCommand);
+            PrintFileCommand = new RelayCommand(PrintFile, CanFireCommand);
         }
 
         public string OpenNote
@@ -51,7 +59,17 @@ namespace Mangopad.ViewModels
             set
             {
                 if (_noteContext == value) return;
+                if (_noteContext == null)
+                {
+                    WordCount = 0;
+                }
+
+                WordCount = value.CountWords();
                 _noteContext = value;
+                CharCount = value.Length;
+
+                if (value != _savedText) _unsavedChanges = true;
+
                 RaisePropertyChanged("NoteContext");
             }
         }
@@ -64,6 +82,29 @@ namespace Mangopad.ViewModels
                 if (_lastSaveTime == value) return;
                 _lastSaveTime = value;
                 RaisePropertyChanged("LastSaveTime");
+            }
+        }
+
+
+        public int WordCount
+        {
+            get => _wordCount;
+            set
+            {
+                if (_wordCount == value) return;
+                _wordCount = value;
+                RaisePropertyChanged("WordCount");
+            }
+        }
+
+        public int CharCount
+        {
+            get => _charCount;
+            set
+            {
+                if (_charCount == value) return;
+                _charCount = value;
+                RaisePropertyChanged("CharCount");
             }
         }
 
@@ -84,10 +125,14 @@ namespace Mangopad.ViewModels
         {
             var path = _noteService.SaveAsFile((string)input);
             if (path.Length < 1) return;
-            _currentFilePath = path;
+
             var name = path.Split(@"\").LastOrDefault();
+            LastSaveTime = DateTimeOffset.Now.ToString("G");
+
+            _currentFilePath = path;
+            _unsavedChanges = false;
+            _savedText = (string)input;
             OpenNote = name;
-            LastSaveTime = DateTimeOffset.Now.ToString("g");
         }
 
         private void OpenFile(object input = null)
@@ -95,15 +140,21 @@ namespace Mangopad.ViewModels
             var strings = _noteService.OpenFile();
             if (strings.Length < 1) return;
             var name = strings[0].Split(@"\").LastOrDefault();
+            WordCount = strings[1].CountWords();
             _currentFilePath = strings[0];
             NoteContext = strings[1];
+            _savedText = strings[1];
             OpenNote = name;
+            LastSaveTime = string.Empty;
         }
 
         private void SaveFile(object input)
         {
-            _noteService.SaveFile((string)input, _currentFilePath);
-            LastSaveTime = DateTimeOffset.Now.ToString("g");
+            var content = _noteService.SaveFile((string)input, _currentFilePath);
+            if (!content) return;
+            LastSaveTime = DateTimeOffset.Now.ToString("G");
+            _unsavedChanges = false;
+            _savedText = (string)input;
         }
 
         private void NewFile(object input)
@@ -111,6 +162,16 @@ namespace Mangopad.ViewModels
             NoteContext = string.Empty;
             _currentFilePath = string.Empty;
             OpenNote = "Default";
+        }
+
+        private void ExitFile(object input)
+        {
+            Environment.Exit(-1);
+        }
+
+        private void PrintFile(object input)
+        {
+            _noteService.PrintFile((string)input);
         }
 
         private bool CanFireCommand(object input)
