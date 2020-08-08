@@ -37,8 +37,8 @@
                  AcceptsTab="True" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" BorderThickness="0" />
         <Grid Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="75" />
-                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="85" />
+                <ColumnDefinition Width="90" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Char:" VerticalAlignment="Bottom" Margin="10,0,0,3" />
@@ -111,7 +111,7 @@
             </mah:DropDownButton>
             <mah:DropDownButton ToolTip="Open edit dialog" ArrowVisibility="Collapsed" Margin="5,0,-10,0">
                 <mah:DropDownButton.Items>
-                    <Button>Select All</Button>
+                    <Button Command="{Binding SelectAllCommand}" CommandParameter="{Binding ElementName=noteBox}">Select All</Button>
                     <Button>Find</Button>
                     <Button>Replace</Button>
                 </mah:DropDownButton.Items>
@@ -133,13 +133,14 @@
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
-            <Button ToolTip="Settings">
-                <Button.ContentTemplate>
-                    <DataTemplate>
-                        <iconPacks:PackIconBoxIcons Kind="SolidCog" />
-                    </DataTemplate>
-                </Button.ContentTemplate>
-            </Button>
+            <mah:DropDownButton ToolTip="Open settings" ArrowVisibility="Collapsed" Margin="6,0,-10,0" >
+                <mah:DropDownButton.Items>
+                    <Button Command="{Binding AutoSaveCommand}" Foreground="{Binding AutoSaveBrush}">Auto-Save</Button>
+                </mah:DropDownButton.Items>
+                <mah:DropDownButton.Icon>
+                    <iconPacks:BoxIcons Kind="SolidCog" />
+                </mah:DropDownButton.Icon>
+            </mah:DropDownButton>
             <Label Content="Mangopad" Margin="0,1,0,0" Foreground="DarkGray"/>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>

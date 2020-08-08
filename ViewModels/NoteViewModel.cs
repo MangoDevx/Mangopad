@@ -4,6 +4,10 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Timers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Mangopad.ViewModels
 {
@@ -18,27 +22,40 @@ namespace Mangopad.ViewModels
         private int _wordCount;
         private int _charCount;
         private bool _unsavedChanges;
+        private SolidColorBrush _autoSaveBrush = Brushes.LawnGreen;
+        private Timer autoSaveTimer = new Timer(TimeSpan.FromMinutes(5).TotalMilliseconds);
 
         private readonly NoteService _noteService;
 
-        public RelayCommand SaveFileAsCommand { get; }
-        public RelayCommand OpenFileCommand { get; }
-        public RelayCommand SaveFileCommand { get; }
-        public RelayCommand NewFileCommand { get; }
-        public RelayCommand ExitFileCommand { get; }
-        public RelayCommand PrintFileCommand { get; }
+        public RelayCommand SaveFileAsCommand { get; private set; }
+        public RelayCommand OpenFileCommand { get; private set; }
+        public RelayCommand SaveFileCommand { get; private set; }
+        public RelayCommand NewFileCommand { get; private set; }
+        public RelayCommand ExitFileCommand { get; private set; }
+        public RelayCommand PrintFileCommand { get; private set; }
+        public RelayCommand SelectAllCommand { get; private set; }
+        public RelayCommand AutoSaveCommand { get; private set; }
 
         public NoteViewModel()
         {
             OpenNote = "Default";
             LastSaveTime = "";
             _noteService = new NoteService();
+            autoSaveTimer.Start();
+            autoSaveTimer.Elapsed += AutoSaveTimerElapsed;
+            InitializeRelayCommands();
+        }
+
+        private void InitializeRelayCommands()
+        {
             SaveFileAsCommand = new RelayCommand(SaveAsFile, CanFireCommand);
             OpenFileCommand = new RelayCommand(OpenFile, CanFireCommand);
             SaveFileCommand = new RelayCommand(SaveFile, CanFireCommand);
             NewFileCommand = new RelayCommand(NewFile, CanFireCommand);
             ExitFileCommand = new RelayCommand(ExitFile, CanFireCommand);
             PrintFileCommand = new RelayCommand(PrintFile, CanFireCommand);
+            SelectAllCommand = new RelayCommand(SelectAll, CanFireCommand);
+            AutoSaveCommand = new RelayCommand(AutoSave, CanFireCommand);
         }
 
         public string OpenNote
@@ -108,6 +125,17 @@ namespace Mangopad.ViewModels
             }
         }
 
+        public SolidColorBrush AutoSaveBrush
+        {
+            get => _autoSaveBrush;
+            set
+            {
+                if (_autoSaveBrush == value) return;
+                _autoSaveBrush = value;
+                RaisePropertyChanged("AutoSaveBrush");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string property = null)
@@ -166,6 +194,7 @@ namespace Mangopad.ViewModels
 
         private void ExitFile(object input)
         {
+            if (_unsavedChanges) FireUnsavedChangesPopup();
             Environment.Exit(-1);
         }
 
@@ -174,9 +203,44 @@ namespace Mangopad.ViewModels
             _noteService.PrintFile((string)input);
         }
 
+        private void FireUnsavedChangesPopup()
+        {
+            if (MessageBox.Show("Would you like to save before exiting?", "Save before exiting", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                SaveFile(_noteContext);
+            }
+        }
+
+        private void SelectAll(object input)
+        {
+            var textBox = (TextBox)input;
+            textBox.Dispatcher.Invoke(() => textBox.SelectAll());
+            textBox.Dispatcher.Invoke(() => textBox.Focus());
+        }
+
+        private void AutoSave(object input)
+        {
+            if (AutoSaveBrush == Brushes.White)
+            {
+                AutoSaveBrush = Brushes.LawnGreen;
+                autoSaveTimer.Start();
+            }
+            else
+            {
+                AutoSaveBrush = Brushes.White;
+                autoSaveTimer.Stop();
+            }
+        }
+
+        private void AutoSaveTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(LastSaveTime)) return;
+            SaveFile(NoteContext);
+        }
+
         private bool CanFireCommand(object input)
         {
-            return input is string || input is null;
+            return true;
         }
     }
 }

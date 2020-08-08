@@ -7,6 +7,7 @@ namespace Mangopad.Commands
 {
     public class NoteService
     {
+
         public string SaveAsFile(string text)
         {
             if (text is null) return string.Empty;
@@ -55,6 +56,7 @@ namespace Mangopad.Commands
             var pd = new PrintDialog();
             pd.ShowDialog();
             var document = CreateFlowDocument(content);
+            if(document is null) return;
             IDocumentPaginatorSource idpSource = document;
             pd.PrintDocument(idpSource.DocumentPaginator, "");
         }
