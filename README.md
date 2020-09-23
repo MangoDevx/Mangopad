@@ -6,4 +6,4 @@ Current features:
   * Quick Save
   * Print (Iffy with some printer drivers, I am not 100% sure why)
   * Auto-Save (Enabled by default, toggleable)
- ![Mangopad GUI]()
+ ![Mangopad GUI](https://github.com/MangoDevx/Mangopad/blob/master/MangoPadGUI.png)
