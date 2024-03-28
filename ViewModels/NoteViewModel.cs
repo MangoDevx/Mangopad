@@ -2,6 +2,7 @@
 using Mangopad.Extensions;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Timers;
@@ -102,7 +103,6 @@ namespace Mangopad.ViewModels
             }
         }
 
-
         public int WordCount
         {
             get => _wordCount;
@@ -158,6 +158,8 @@ namespace Mangopad.ViewModels
             LastSaveTime = DateTimeOffset.Now.ToString("G");
 
             _currentFilePath = path;
+            var fi = new FileInfo(_currentFilePath);
+            name = fi.Name;
             _unsavedChanges = false;
             _savedText = (string)input;
             OpenNote = name;
